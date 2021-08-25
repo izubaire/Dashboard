@@ -1,17 +1,13 @@
-import { fromJSON } from 'postcss'
 import React,{useState} from 'react'
+import Search from './Search'
 
 export default function Header() {
     const [openSrc, setOpenSrc] = useState(false)
 
     return (
-        <header className="header w-full bg-white py-6 px-8 rounded-lg shadow-md overflow-hidden flex justify-between items-center">
+        <header className="header w-full bg-white py-6 px-8 rounded-lg shadow-md flex justify-between items-center z-50 sticky top-0 left-0">
             {openSrc ?
-
-             <form>
-                 search bar
-             </form> 
-
+            <Search setOpenSrc={setOpenSrc}/>
             : <>
                 <div className="header__left flex items-end gap-6">
                     <i className="far fa-envelope text-3xl text-gray-500 hover:text-blue-500 transition-all duration-200 cursor-pointer"></i>
