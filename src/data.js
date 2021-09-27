@@ -528,6 +528,14 @@ const plan = ['Select Plan', 'Basic', 'Company', 'Enterprise', 'Team']
 const userPlan = ['Basic', 'Company', 'Enterprise', 'Team']
 const status = ['Select Status', 'Pending', 'Active', 'Inactive']
 
+const randomRole = {
+  Editor: [PencilIcon, "text-sky-500"],
+  Subscriber: [UserIcon, "text-indigo-500"],
+  Admin: [AcademicCapIcon, "text-red-500"],
+  Maintainer: [DatabaseIcon, "text-green-500"],
+  Author: [CogIcon, "text-orange-500"]
+}
+
 const allUsers = [
   {
     id:1,
@@ -1331,4 +1339,10 @@ const allUsers = [
   },
 ]
 
-export {contacts, files, pages, barChart, lineChart, pieChart, doubleBarChart, dashesLineChart, customAngleChart, radialBarChart, role, plan, status, allUsers, userRole, userPlan}
+const randomColors = [["text-green-500", "bg-green-100"], ["text-red-500", "bg-red-100"], ["text-yellow-500", "bg-yellow-100"], ["text-orange-500", "bg-orange-100"], ["text-blue-500", "bg-blue-100"], ["text-indigo-500", "bg-indigo-100"], ["text-lime-500", "bg-lime-100"]]
+
+function pickColor(items){
+  return items[Math.floor(Math.random()*items.length)]
+}
+
+export {contacts, files, pages, barChart, lineChart, pieChart, doubleBarChart, dashesLineChart, customAngleChart, radialBarChart, role, plan, status, allUsers, userRole, userPlan, pickColor, randomColors, randomRole}

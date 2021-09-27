@@ -3,6 +3,15 @@ import {allUsers} from './data'
 
 const initialState = {
     usersList: [...allUsers],
+    lbVisible : {
+        visible:false, 
+        actionType:'Submit',
+        edit:{
+            id: '',
+            fullName: '',
+            email: ''
+        }
+    }
 }
 
 export const admin = createSlice({
@@ -17,10 +26,32 @@ export const admin = createSlice({
         },
         dscSort: (state, action)=>{
             state.usersList = state.usersList.sort((a, b) => { return (a[action.payload][0] > b[action.payload][0] ? -1 : (a[action.payload][0] === b[action.payload][0] ? 0 : 1)) })
+        },
+        openBox: (state, action)=>{
+            state.lbVisible.visible = action.payload.visibleClass
+            state.lbVisible.actionType = action.payload.typeAction
+            if(action.payload.userData && action.payload.typeAction==='Submit'){
+                state.usersList = [action.payload.userData, ...state.usersList]
+            }else if(action.payload.userData && action.payload.typeAction==='Update'){
+                const updatedUserId = state.lbVisible.edit.id
+                const idx = state.usersList.findIndex(user=>user.id===updatedUserId)
+                state.usersList[idx].user = [action.payload.userData.fullName]
+                state.usersList[idx].mail = [action.payload.userData.email]
+                state.usersList[idx].plan = [action.payload.userData.plan, "Select Plan"]
+                state.usersList[idx].role = [action.payload.userData.role, "Select Role"]
+            }
+            if(action.payload.id){
+                const userId = action.payload.id
+                const currentUser = state.usersList.find(user=>user.id===userId)
+                state.lbVisible.edit.fullName = currentUser.user[0]
+                state.lbVisible.edit.email = currentUser.mail
+                state.lbVisible.edit.id = userId
+            }
         }
     }
 })
 
 export const users = (state)=>state.users.usersList
-export const {userDelete, ascSort, dscSort} = admin.actions
+export const lb = (state) => state.users.lbVisible
+export const {userDelete, ascSort, dscSort, openBox} = admin.actions
 export default admin.reducer 
