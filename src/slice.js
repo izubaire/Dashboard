@@ -1,6 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {allUsers} from './data'
 
+const KEY = 'DETAIL'
+if(!localStorage.getItem(KEY)){
+    localStorage.setItem(KEY, JSON.stringify({...allUsers[0]}))
+}
+
 const initialState = {
     usersList: [...allUsers],
     lbVisible : {
@@ -11,7 +16,8 @@ const initialState = {
             fullName: '',
             email: ''
         }
-    }
+    },
+    details: {...JSON.parse(localStorage.getItem(KEY))}
 }
 
 export const admin = createSlice({
@@ -47,11 +53,18 @@ export const admin = createSlice({
                 state.lbVisible.edit.email = currentUser.mail
                 state.lbVisible.edit.id = userId
             }
+        },
+        userDetail: (state, action) => {
+            const detailId = action.payload.id
+            const detailedUser = state.usersList.find(user=>user.id===detailId)
+            state.details = detailedUser
+            localStorage.setItem(KEY, JSON.stringify(detailedUser))
         }
     }
 })
 
 export const users = (state)=>state.users.usersList
 export const lb = (state) => state.users.lbVisible
-export const {userDelete, ascSort, dscSort, openBox} = admin.actions
+export const detail = (state) => state.users.details
+export const {userDelete, ascSort, dscSort, openBox, userDetail} = admin.actions
 export default admin.reducer 
