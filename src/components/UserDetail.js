@@ -1,4 +1,4 @@
-import React,{useMemo} from 'react'
+import React,{useMemo, useEffect} from 'react'
 import {detail} from '../slice'
 import {useSelector} from 'react-redux'
 import { CheckIcon, BriefcaseIcon } from '@heroicons/react/outline'
@@ -7,17 +7,35 @@ import UserStatus from './UserStatus'
 import Bar from './Bar'
 import DetailsInfo from './DetailsInfo'
 import Footer from './Footer'
+import {useLocation } from "react-router-dom"
+import {useDispatch} from 'react-redux'
+import {setLoc,userDetail} from '../slice'
+import {Link} from "react-router-dom";
 
 export default function UserDetail() {
-    const {avatarColor, avatarBg, avatarImg, user, status, statusBg, statusColor, role, roleIconColor, mail} = useSelector(detail)
+    const {avatarColor, avatarBg, avatarImg, user, status, statusBg, statusColor, role, roleIconColor, mail, id} = useSelector(detail)
+    const { pathname } = useLocation()
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        dispatch(userDetail({id}))
+    },[])
 
     const roleBg = useMemo(()=>{
+        if(!roleIconColor) return
         const color = roleIconColor.split('-')
         return `bg-${color[1]}-100`
     },[roleIconColor])
 
+    
+    useEffect(()=>{
+        dispatch(setLoc(pathname))
+    },[pathname])
+
     return (
         <>
+    {id?
+    <>
     <section className="userDetail grid grid-cols-3 gap-10 mb-16 mt-10">
         <div className="detail col-span-1">
 
@@ -81,6 +99,11 @@ export default function UserDetail() {
 
     </section>
     <Footer/>
+    </>
+    :<div className="errorMsg mt-8">
+        <h2 className="normal-case bg-red-100 text-red-500 text-2xl drop-shadow font-semibold py-3 pl-4 rounded-tl-xl rounded-tr-xl">User not found</h2>
+        <h2 className="normal-case bg-red-100 text-red-500 text-2xl font-medium py-3 pl-4 rounded-bl-xl rounded-br-xl">User might've got deleted. Check list of all Users: <Link to="/user/list" className="text-blue-500">Users List</Link></h2>
+    </div>}
     </>
     )
 }

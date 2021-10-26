@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import News from './News'
 import ReactApexChart from 'react-apexcharts'
 import {barChart, lineChart, pieChart, doubleBarChart, customAngleChart, radialBarChart} from '../data'
@@ -10,6 +10,9 @@ import ReactTooltip from 'react-tooltip';
 import BrowserCard from './BrowserCard'
 import TransIcon from './TransIcon'
 import Footer from './Footer'
+import {useLocation, Link} from "react-router-dom"
+import {useDispatch} from 'react-redux'
+import {setLoc} from '../slice'
 
 export default function ECommerce() {
     const [bar] = useState(barChart)
@@ -17,9 +20,17 @@ export default function ECommerce() {
     const [donut] = useState(pieChart)
     const [doubleBar] = useState(doubleBarChart)
     const [customAngle] = useState(customAngleChart)
+    const { pathname } = useLocation()
+    const dispatch = useDispatch()
+    
+    useEffect(()=>{
+        dispatch(setLoc(pathname))
+    },[pathname])
 
     return (
         <section className="eCommerce">
+
+            <Link to="/user/list" className="fixed bottom-16 right-5 text-xl bg-red-500 text-white font-semibold py-3 px-6 shadow-lg shadow-red-500 rounded-lg transition-all hover:shadow-none">Users List</Link>
 
             <div className="eCommerce__statistics grid grid-cols-3 gap-10 my-8">
                 <div className="congrats bg-white shadow-lg p-7 rounded-xl overflow-hidden relative">

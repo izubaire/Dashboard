@@ -17,7 +17,8 @@ const initialState = {
             email: ''
         }
     },
-    details: {...JSON.parse(localStorage.getItem(KEY))}
+    details: {...JSON.parse(localStorage.getItem(KEY))},
+    currentLoc: '/dashboard/ecommerce'
 }
 
 export const admin = createSlice({
@@ -45,6 +46,10 @@ export const admin = createSlice({
                 state.usersList[idx].mail = [action.payload.userData.email]
                 state.usersList[idx].plan = [action.payload.userData.plan, "Select Plan"]
                 state.usersList[idx].role = [action.payload.userData.role, "Select Role"]
+                if(JSON.parse(localStorage.getItem(KEY)).id === state.usersList[idx].id){
+                    localStorage.setItem(KEY, JSON.stringify(state.usersList[idx]))
+                    state.details = state.usersList[idx]
+                }
             }
             if(action.payload.id){
                 const userId = action.payload.id
@@ -57,8 +62,15 @@ export const admin = createSlice({
         userDetail: (state, action) => {
             const detailId = action.payload.id
             const detailedUser = state.usersList.find(user=>user.id===detailId)
-            state.details = detailedUser
-            localStorage.setItem(KEY, JSON.stringify(detailedUser))
+            if(detailedUser){
+                state.details = detailedUser
+                localStorage.setItem(KEY, JSON.stringify(detailedUser))
+            }else{
+                state.details = ''
+            }
+        },
+        setLoc: (state, action) => {
+            state.currentLoc = action.payload
         }
     }
 })
@@ -66,5 +78,6 @@ export const admin = createSlice({
 export const users = (state)=>state.users.usersList
 export const lb = (state) => state.users.lbVisible
 export const detail = (state) => state.users.details
-export const {userDelete, ascSort, dscSort, openBox, userDetail} = admin.actions
+export const currentRoute = (state) => state.users.currentLoc
+export const {userDelete, ascSort, dscSort, openBox, userDetail, setLoc} = admin.actions
 export default admin.reducer 
