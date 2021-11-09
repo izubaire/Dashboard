@@ -1,15 +1,21 @@
-import React,{useRef, useState, useEffect} from 'react'
+import React,{useState, useEffect} from 'react'
 import Collapse from './Collapse'
 import Logo from './Logo'
 import SubMenu from './SubMenu'
 import {useSelector} from 'react-redux'
-import {currentRoute} from '../slice'
+import {currentRoute, getMenuState} from '../slice'
+import { XIcon } from '@heroicons/react/outline'
+import {setMenu} from '../slice'
+import {useDispatch} from 'react-redux'
+
 
 export default function Menu() {
     const [megaMenu, subMenu] = useSelector(currentRoute).split('/').slice(1)
     const [active, setActive] = useState(subMenu)
     const [parent, setParent] = useState(megaMenu)
     const [nParent, setNParent] = useState(null)
+    const menuState = useSelector(getMenuState)
+    const dispatch = useDispatch()
 
     useEffect(()=>{
         setActive(subMenu)
@@ -18,10 +24,11 @@ export default function Menu() {
     },[megaMenu, subMenu])
 
     return (
-        <section className="menu w-97 bg-white h-screen fixed top-0 left-0 shadow-lg hidden xlg:block">
+        <section className={`menu w-97 bg-white h-screen fixed top-0 shadow-lg ${menuState?'left-0':'-left-full'} xlg:left-0 z-[100] transition-all ease-in-out`}>
             <div className="menu__logo h-24 flex items-center justify-between px-8">
                 <Logo/>
-                <span className="circles flex justify-center items-center w-8 h-8 rounded-full border-2 border-solid border-blue-600"></span>
+                <span className="circles hidden xlg:flex justify-center items-center w-8 h-8 rounded-full border-2 border-solid border-blue-600"></span>
+                <XIcon className="w-8 h-8 text-blue-600 block xlg:hidden cursor-pointer" onClick={()=>dispatch(setMenu())}/>
             </div>
             <nav className="menu__container pl-6 pr-4 overflow-y-scroll myScroll">
 

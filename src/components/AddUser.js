@@ -20,7 +20,7 @@ export default function AddUser({cancelForm, dispatch, Lb}) {
         const roleInfo = randomRole[userInfo['User Role']]
         const newUser = {
             id: Date.now(),
-            avatarImg: fullName.length===1?fullName.slice(0,2):`${fullName[0][0]}${fullName[1][0]}`,
+            avatarImg: fullName.length===1?`${fullName[0].slice(0,2)}`.toUpperCase():`${fullName[0][0]}${fullName[1][0]}`.toUpperCase(),
             avatarColor: avatarStyle[0],
             avatarBg: avatarStyle[1],
             user: [fullName.join(' ')],
@@ -39,7 +39,7 @@ export default function AddUser({cancelForm, dispatch, Lb}) {
     }
 
     return (
-    <motion.div className={` addUser bg-white absolute top-0 right-0 h-screen w-98 normal-case`} initial={{x: "35rem"}} animate={{x: 0}}>
+    <motion.div className={` addUser bg-white absolute top-0 right-0 h-screen w-full sm:w-98 normal-case`} initial={{x: "35rem"}} animate={{x: 0}}>
         <h2 className="h-4.5 px-7 bg-gray-100 flex justify-between items-center text-2xl text-gray-600 font-medium">
             New User 
             <XIcon className="w-6 h-6 text-gray-500 cursor-pointer" onClick={cancelForm}/>
